@@ -1,0 +1,3834 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#FF6B35">
+    <meta name="description" content="Mileon - Track Your Journey. Application de tracking sportif nouvelle génération.">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Mileon - Track Your Journey</title>
+    
+    <!-- ============================================
+         CDN LIBRARIES OPTIMISÉES
+    ============================================= -->
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" 
+          crossorigin=""/>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" 
+          integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" 
+          crossorigin="anonymous"/>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
+    
+    <!-- ============================================
+         CUSTOM CSS - DESIGN SYSTÈME COMPLET
+    ============================================= -->
+    <style>
+        /* ==================== VARIABLES & DESIGN TOKENS ==================== */
+        :root {
+            /* Palette Principale */
+            --primary-50: #FFF5F0;
+            --primary-100: #FFE8DD;
+            --primary-200: #FFD4BD;
+            --primary-300: #FFB993;
+            --primary-400: #FF9664;
+            --primary-500: #FF6B35;
+            --primary-600: #FF4C02;
+            --primary-700: #E04302;
+            --primary-800: #BA3504;
+            --primary-900: #992D09;
+            
+            /* Neutres */
+            --gray-50: #F9FAFB;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-300: #D1D5DB;
+            --gray-400: #9CA3AF;
+            --gray-500: #6B7280;
+            --gray-600: #4B5563;
+            --gray-700: #374151;
+            --gray-800: #1F2937;
+            --gray-900: #111827;
+            --gray-950: #030712;
+            
+            /* Sémantiques */
+            --success: #10B981;
+            --success-light: #D1FAE5;
+            --warning: #F59E0B;
+            --warning-light: #FEF3C7;
+            --error: #EF4444;
+            --error-light: #FEE2E2;
+            --info: #3B82F6;
+            --info-light: #DBEAFE;
+            
+            /* Backgrounds */
+            --bg-primary: var(--gray-950);
+            --bg-secondary: var(--gray-900);
+            --bg-tertiary: var(--gray-800);
+            --bg-card: rgba(31, 41, 55, 0.8);
+            --bg-card-solid: var(--gray-800);
+            --bg-overlay: rgba(0, 0, 0, 0.75);
+            
+            /* Text */
+            --text-primary: var(--gray-50);
+            --text-secondary: var(--gray-300);
+            --text-tertiary: var(--gray-400);
+            --text-muted: var(--gray-500);
+            
+            /* Borders */
+            --border-default: var(--gray-700);
+            --border-light: var(--gray-600);
+            --border-focus: var(--primary-500);
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-500) 100%);
+            --gradient-primary-hover: linear-gradient(135deg, var(--primary-700) 0%, var(--primary-600) 100%);
+            --gradient-dark: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+            --gradient-card: linear-gradient(145deg, rgba(31, 41, 55, 0.9) 0%, rgba(17, 24, 39, 0.95) 100%);
+            --gradient-glow: radial-gradient(circle at center, rgba(255, 107, 53, 0.15) 0%, transparent 70%);
+            
+            /* Shadows */
+            --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px -1px rgba(0, 0, 0, 0.4);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -4px rgba(0, 0, 0, 0.5);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.7), 0 8px 10px -6px rgba(0, 0, 0, 0.6);
+            --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+            --shadow-glow: 0 0 40px rgba(255, 107, 53, 0.3);
+            --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+            
+            /* Border Radius */
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+            --radius-full: 9999px;
+            
+            /* Spacing */
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-10: 2.5rem;
+            --space-12: 3rem;
+            --space-16: 4rem;
+            
+            /* Typography */
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --font-size-xs: 0.75rem;
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --font-size-2xl: 1.5rem;
+            --font-size-3xl: 1.875rem;
+            --font-size-4xl: 2.25rem;
+            --font-size-5xl: 3rem;
+            
+            /* Transitions */
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            
+            /* Z-index layers */
+            --z-dropdown: 1000;
+            --z-sticky: 1020;
+            --z-fixed: 1030;
+            --z-modal-backdrop: 1040;
+            --z-modal: 1050;
+            --z-popover: 1060;
+            --z-tooltip: 1070;
+            --z-toast: 1080;
+        }
+
+        /* ==================== RESET & BASE ==================== */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255, 107, 53, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 107, 53, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* ==================== UTILITIES ==================== */
+        .hidden { display: none !important; }
+        .invisible { visibility: hidden; }
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .items-center { align-items: center; }
+        .items-start { align-items: flex-start; }
+        .justify-center { justify-content: center; }
+        .justify-between { justify-content: space-between; }
+        .gap-1 { gap: var(--space-1); }
+        .gap-2 { gap: var(--space-2); }
+        .gap-3 { gap: var(--space-3); }
+        .gap-4 { gap: var(--space-4); }
+        .gap-6 { gap: var(--space-6); }
+        .gap-8 { gap: var(--space-8); }
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .text-primary { color: var(--primary-500); }
+        .text-secondary { color: var(--text-secondary); }
+        .text-tertiary { color: var(--text-tertiary); }
+        .text-muted { color: var(--text-muted); }
+        .font-light { font-weight: 300; }
+        .font-normal { font-weight: 400; }
+        .font-medium { font-weight: 500; }
+        .font-semibold { font-weight: 600; }
+        .font-bold { font-weight: 700; }
+        .font-extrabold { font-weight: 800; }
+        .text-xs { font-size: var(--font-size-xs); }
+        .text-sm { font-size: var(--font-size-sm); }
+        .text-base { font-size: var(--font-size-base); }
+        .text-lg { font-size: var(--font-size-lg); }
+        .text-xl { font-size: var(--font-size-xl); }
+        .text-2xl { font-size: var(--font-size-2xl); }
+        .text-3xl { font-size: var(--font-size-3xl); }
+        .text-4xl { font-size: var(--font-size-4xl); }
+        .text-5xl { font-size: var(--font-size-5xl); }
+        .w-full { width: 100%; }
+        .h-full { height: 100%; }
+        .min-h-screen { min-height: 100vh; }
+        .max-w-xs { max-width: 20rem; }
+        .max-w-sm { max-width: 24rem; }
+        .max-w-md { max-width: 28rem; }
+        .max-w-lg { max-width: 32rem; }
+        .max-w-xl { max-width: 36rem; }
+        .max-w-2xl { max-width: 42rem; }
+        .max-w-4xl { max-width: 56rem; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .my-auto { margin-top: auto; margin-bottom: auto; }
+        .overflow-hidden { overflow: hidden; }
+        .overflow-y-auto { overflow-y: auto; }
+        .relative { position: relative; }
+        .absolute { position: absolute; }
+        .fixed { position: fixed; }
+        .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+        .pointer-events-none { pointer-events: none; }
+        .cursor-pointer { cursor: pointer; }
+        .select-none { user-select: none; }
+        .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+        /* ==================== ANIMATIONS ==================== */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.7;
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(0.8);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+                animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+            }
+            50% {
+                transform: translateY(-10px);
+                animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+            }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .animate-fade-in { animation: fadeIn var(--transition-slow) ease-out; }
+        .animate-fade-in-up { animation: fadeInUp var(--transition-slow) ease-out; }
+        .animate-fade-in-down { animation: fadeInDown var(--transition-slow) ease-out; }
+        .animate-slide-in-right { animation: slideInRight var(--transition-slow) ease-out; }
+        .animate-slide-in-left { animation: slideInLeft var(--transition-slow) ease-out; }
+        .animate-scale-in { animation: scaleIn var(--transition-base) ease-out; }
+        .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        .animate-pulse-ring { animation: pulse-ring 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        .animate-spin { animation: spin 1s linear infinite; }
+        .animate-bounce { animation: bounce 2s ease-in-out infinite; }
+        .animate-float { animation: float 3s ease-in-out infinite; }
+        .animate-gradient { 
+            background-size: 200% 200%;
+            animation: gradient 3s ease infinite;
+        }
+
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
+        .delay-400 { animation-delay: 400ms; }
+        .delay-500 { animation-delay: 500ms; }
+
+        /* ==================== LANDING PAGE ==================== */
+        #landing-screen {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .landing-hero {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-8);
+            text-align: center;
+            position: relative;
+            background: 
+                radial-gradient(circle at 50% 50%, rgba(255, 107, 53, 0.1) 0%, transparent 60%);
+        }
+
+        .landing-logo {
+            margin-bottom: var(--space-8);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .landing-logo-icon {
+            width: 120px;
+            height: 120px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-2xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-glow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .landing-logo-icon::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.1) 50%,
+                transparent 70%
+            );
+            animation: shimmer 3s infinite;
+        }
+
+        .landing-logo-icon i {
+            font-size: 3.5rem;
+            color: white;
+            position: relative;
+            z-index: 1;
+        }
+
+        .landing-title {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: var(--space-4);
+            letter-spacing: -0.02em;
+            animation: fadeInUp var(--transition-slow) ease-out;
+        }
+
+        .landing-tagline {
+            font-size: clamp(1.125rem, 3vw, 1.5rem);
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: var(--space-8);
+            line-height: 1.7;
+            animation: fadeInUp var(--transition-slow) ease-out 0.1s both;
+        }
+
+        .landing-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-6);
+            max-width: 1000px;
+            width: 100%;
+            margin-bottom: var(--space-10);
+            padding: 0 var(--space-4);
+        }
+
+        .feature-card {
+            background: var(--gradient-card);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-xl);
+            padding: var(--space-6);
+            text-align: left;
+            transition: all var(--transition-base);
+            animation: fadeInUp var(--transition-slow) ease-out both;
+            backdrop-filter: blur(10px);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-500);
+            box-shadow: var(--shadow-lg), var(--shadow-glow);
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: var(--space-4);
+            box-shadow: var(--shadow-md);
+        }
+
+        .feature-icon i {
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .feature-title {
+            font-size: var(--font-size-xl);
+            font-weight: 700;
+            margin-bottom: var(--space-2);
+            color: var(--text-primary);
+        }
+
+        .feature-description {
+            color: var(--text-tertiary);
+            font-size: var(--font-size-sm);
+            line-height: 1.6;
+        }
+
+        .landing-cta {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-4);
+            width: 100%;
+            max-width: 400px;
+            padding: 0 var(--space-4);
+            animation: fadeInUp var(--transition-slow) ease-out 0.3s both;
+        }
+
+        .landing-stats {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-8);
+            margin-top: var(--space-8);
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: var(--font-size-3xl);
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: var(--font-size-sm);
+            color: var(--text-muted);
+            margin-top: var(--space-1);
+        }
+
+        /* ==================== AUTH SCREEN ==================== */
+        #auth-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-6);
+            background: var(--gradient-dark);
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 440px;
+            background: var(--gradient-card);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-8);
+            border: 1px solid var(--border-default);
+            box-shadow: var(--shadow-2xl);
+            backdrop-filter: blur(20px);
+            animation: scaleIn var(--transition-slow) ease-out;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: var(--space-8);
+        }
+
+        .auth-logo {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-xl);
+            margin-bottom: var(--space-4);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .auth-logo i {
+            font-size: 2rem;
+            color: white;
+        }
+
+        .auth-title {
+            font-size: var(--font-size-2xl);
+            font-weight: 800;
+            margin-bottom: var(--space-2);
+        }
+
+        .auth-subtitle {
+            color: var(--text-tertiary);
+            font-size: var(--font-size-sm);
+        }
+
+        .form-group {
+            margin-bottom: var(--space-5);
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: var(--space-2);
+            color: var(--text-secondary);
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+        }
+
+        .form-input-wrapper {
+            position: relative;
+        }
+
+        .form-input-icon {
+            position: absolute;
+            left: var(--space-4);
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+            transition: color var(--transition-fast);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: var(--space-4) var(--space-4) var(--space-4) var(--space-12);
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-lg);
+            color: var(--text-primary);
+            font-size: var(--font-size-base);
+            transition: all var(--transition-fast);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-500);
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
+        }
+
+        .form-input:focus + .form-input-icon {
+            color: var(--primary-500);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-5);
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary-500);
+            cursor: pointer;
+        }
+
+        .checkbox-label {
+            font-size: var(--font-size-sm);
+            color: var(--text-tertiary);
+            cursor: pointer;
+        }
+
+        .forgot-link {
+            font-size: var(--font-size-sm);
+            color: var(--primary-500);
+            text-decoration: none;
+            transition: color var(--transition-fast);
+        }
+
+        .forgot-link:hover {
+            color: var(--primary-400);
+            text-decoration: underline;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+            padding: var(--space-4) var(--space-6);
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: var(--font-size-base);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: left var(--transition-slow);
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            width: 100%;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:hover {
+            background: var(--gradient-primary-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg), var(--shadow-glow);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-default);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border-color: var(--border-light);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-tertiary);
+        }
+
+        .btn-ghost:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .btn-icon {
+            padding: var(--space-3);
+            border-radius: var(--radius-full);
+        }
+
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            margin: var(--space-6) 0;
+            color: var(--text-muted);
+            font-size: var(--font-size-sm);
+        }
+
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border-default);
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: var(--space-6);
+            color: var(--text-tertiary);
+            font-size: var(--font-size-sm);
+        }
+
+        .auth-switch a {
+            color: var(--primary-500);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color var(--transition-fast);
+        }
+
+        .auth-switch a:hover {
+            color: var(--primary-400);
+            text-decoration: underline;
+        }
+
+        .social-auth {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-3);
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+            padding: var(--space-3);
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-lg);
+            color: var(--text-secondary);
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .social-btn:hover {
+            background: var(--bg-card-solid);
+            border-color: var(--border-light);
+            color: var(--text-primary);
+        }
+
+        /* ==================== MAIN APP ==================== */
+        #app-screen {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .app-header {
+            position: sticky;
+            top: 0;
+            z-index: var(--z-sticky);
+            background: rgba(17, 24, 39, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-default);
+            padding: var(--space-4) var(--space-5);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all var(--transition-base);
+        }
+
+        .app-header.scrolled {
+            box-shadow: var(--shadow-md);
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+
+        .header-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-logo-icon i {
+            font-size: 1.25rem;
+            color: white;
+        }
+
+        .header-logo-text {
+            font-size: var(--font-size-xl);
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: var(--space-2);
+        }
+
+        .header-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: var(--radius-full);
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-default);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            position: relative;
+        }
+
+        .header-btn:hover {
+            background: var(--bg-card-solid);
+            color: var(--text-primary);
+            border-color: var(--border-light);
+            transform: translateY(-2px);
+        }
+
+        .header-btn .badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background: var(--primary-500);
+            border-radius: var(--radius-full);
+            border: 2px solid var(--bg-secondary);
+        }
+
+        .user-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: var(--radius-full);
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: var(--font-size-sm);
+            color: white;
+            cursor: pointer;
+            border: 2px solid var(--border-default);
+            transition: all var(--transition-fast);
+        }
+
+        .user-avatar:hover {
+            border-color: var(--primary-500);
+            transform: scale(1.05);
+        }
+
+        /* Main Content */
+        .app-main {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 100px;
+            scroll-behavior: smooth;
+        }
+
+        .view-section {
+            padding: var(--space-5);
+            animation: fadeIn var(--transition-base) ease-out;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--gradient-card);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-xl);
+            padding: var(--space-6);
+            margin-bottom: var(--space-5);
+            transition: all var(--transition-base);
+            backdrop-filter: blur(10px);
+        }
+
+        .card:hover {
+            border-color: var(--border-light);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-5);
+        }
+
+        .card-title {
+            font-size: var(--font-size-lg);
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .card-subtitle {
+            color: var(--text-tertiary);
+            font-size: var(--font-size-sm);
+            margin-top: var(--space-1);
+        }
+
+        .card-link {
+            color: var(--primary-500);
+            text-decoration: none;
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            transition: color var(--transition-fast);
+        }
+
+        .card-link:hover {
+            color: var(--primary-400);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-4);
+        }
+
+        @media (min-width: 640px) {
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .stat-card {
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-lg);
+            padding: var(--space-4);
+            text-align: center;
+            transition: all var(--transition-fast);
+            border: 1px solid var(--border-default);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary-500);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-icon {
+            font-size: var(--font-size-xl);
+            color: var(--primary-500);
+            margin-bottom: var(--space-2);
+        }
+
+        .stat-value {
+            font-size: var(--font-size-2xl);
+            font-weight: 800;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: var(--font-size-xs);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: var(--space-1);
+        }
+
+        /* Map Container */
+        #map-container {
+            height: calc(100vh - 220px);
+            min-height: 450px;
+            border-radius: var(--radius-2xl);
+            overflow: hidden;
+            border: 1px solid var(--border-default);
+            position: relative;
+            box-shadow: var(--shadow-lg);
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+
+        .map-overlay {
+            position: absolute;
+            top: var(--space-4);
+            right: var(--space-4);
+            z-index: var(--z-popover);
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+        }
+
+        .map-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-lg);
+            background: var(--bg-card);
+            border: 1px solid var(--border-default);
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition-fast);
+            backdrop-filter: blur(10px);
+        }
+
+        .map-btn:hover {
+            background: var(--bg-card-solid);
+            transform: scale(1.05);
+            border-color: var(--primary-500);
+        }
+
+        .map-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Tracking Controls */
+        .tracking-controls {
+            position: fixed;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: var(--z-fixed);
+            display: flex;
+            gap: var(--space-4);
+            padding: var(--space-4);
+        }
+
+        .tracking-btn {
+            width: 72px;
+            height: 72px;
+            border-radius: var(--radius-full);
+            border: none;
+            font-size: var(--font-size-2xl);
+            cursor: pointer;
+            box-shadow: var(--shadow-xl);
+            transition: all var(--transition-base);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tracking-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: inherit;
+            opacity: 0;
+            transition: opacity var(--transition-fast);
+        }
+
+        .tracking-btn:hover::before {
+            opacity: 0.1;
+        }
+
+        .tracking-btn.start {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .tracking-btn.start:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-2xl), var(--shadow-glow);
+        }
+
+        .tracking-btn.stop {
+            background: linear-gradient(135deg, var(--error) 0%, #DC2626 100%);
+            color: white;
+        }
+
+        .tracking-btn.stop:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-2xl), 0 0 40px rgba(239, 68, 68, 0.4);
+        }
+
+        .tracking-btn:active {
+            transform: scale(0.95);
+        }
+
+        .tracking-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Tracking Stats Bar */
+        .tracking-stats {
+            position: fixed;
+            bottom: 170px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: var(--z-fixed);
+            background: var(--bg-card);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-4) var(--space-6);
+            display: flex;
+            gap: var(--space-6);
+            box-shadow: var(--shadow-xl);
+            backdrop-filter: blur(20px);
+        }
+
+        .tracking-stat {
+            text-align: center;
+        }
+
+        .tracking-stat-value {
+            font-size: var(--font-size-xl);
+            font-weight: 800;
+            color: var(--primary-500);
+            line-height: 1.2;
+        }
+
+        .tracking-stat-label {
+            font-size: var(--font-size-xs);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: var(--space-1);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(17, 24, 39, 0.98);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border-default);
+            padding: var(--space-2) var(--space-4);
+            display: flex;
+            justify-content: space-around;
+            z-index: var(--z-fixed);
+            padding-bottom: max(var(--space-2), env(safe-area-inset-bottom));
+            box-shadow: var(--shadow-lg);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-1);
+            padding: var(--space-2) var(--space-4);
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: all var(--transition-fast);
+            cursor: pointer;
+            border-radius: var(--radius-lg);
+            position: relative;
+        }
+
+        .nav-item i {
+            font-size: var(--font-size-xl);
+            transition: transform var(--transition-fast);
+        }
+
+        .nav-item span {
+            font-size: var(--font-size-xs);
+            font-weight: 500;
+        }
+
+        .nav-item.active {
+            color: var(--primary-500);
+        }
+
+        .nav-item.active i {
+            transform: translateY(-2px);
+        }
+
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            background: var(--primary-500);
+            border-radius: var(--radius-full);
+        }
+
+        .nav-item:hover {
+            color: var(--text-secondary);
+            background: var(--bg-tertiary);
+        }
+
+        .nav-item:hover i {
+            transform: scale(1.1);
+        }
+
+        /* GPS Status */
+        .gps-status {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            padding: var(--space-3) var(--space-4);
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--space-4);
+            border: 1px solid var(--border-default);
+            transition: all var(--transition-fast);
+        }
+
+        .gps-status.active {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .gps-status.searching {
+            border-color: var(--warning);
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .gps-status.error {
+            border-color: var(--error);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .gps-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: var(--radius-full);
+            background: var(--text-muted);
+            position: relative;
+        }
+
+        .gps-indicator.active {
+            background: var(--success);
+            box-shadow: 0 0 10px var(--success);
+        }
+
+        .gps-indicator.active::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border: 2px solid var(--success);
+            border-radius: var(--radius-full);
+            animation: pulse-ring 1.5s ease-out infinite;
+        }
+
+        .gps-indicator.searching {
+            background: var(--warning);
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        .gps-indicator.error {
+            background: var(--error);
+        }
+
+        .gps-text {
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Activity Feed */
+        .activity-item {
+            display: flex;
+            gap: var(--space-4);
+            padding: var(--space-4);
+            border-bottom: 1px solid var(--border-default);
+            transition: all var(--transition-fast);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-item:hover {
+            background: var(--bg-tertiary);
+            margin: 0 calc(-1 * var(--space-4));
+            padding-left: var(--space-4);
+            padding-right: var(--space-4);
+        }
+
+        .activity-avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: var(--radius-full);
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: var(--font-size-lg);
+            color: white;
+            flex-shrink: 0;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .activity-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .activity-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            margin-bottom: var(--space-2);
+            flex-wrap: wrap;
+        }
+
+        .activity-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .activity-time {
+            color: var(--text-muted);
+            font-size: var(--font-size-sm);
+        }
+
+        .activity-stats {
+            display: flex;
+            gap: var(--space-4);
+            color: var(--text-tertiary);
+            font-size: var(--font-size-sm);
+            flex-wrap: wrap;
+        }
+
+        .activity-stat {
+            display: flex;
+            align-items: center;
+            gap: var(--space-1);
+        }
+
+        .activity-stat i {
+            color: var(--primary-500);
+        }
+
+        /* Profile */
+        .profile-header {
+            text-align: center;
+            padding: var(--space-8) var(--space-4);
+            background: var(--gradient-glow);
+        }
+
+        .profile-avatar {
+            width: 110px;
+            height: 110px;
+            border-radius: var(--radius-full);
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-3xl);
+            font-weight: 800;
+            color: white;
+            margin: 0 auto var(--space-4);
+            border: 4px solid var(--bg-secondary);
+            box-shadow: var(--shadow-lg), var(--shadow-glow);
+            position: relative;
+        }
+
+        .profile-avatar::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border: 2px solid var(--primary-500);
+            border-radius: var(--radius-full);
+            opacity: 0.3;
+        }
+
+        .profile-name {
+            font-size: var(--font-size-2xl);
+            font-weight: 800;
+            margin-bottom: var(--space-1);
+            color: var(--text-primary);
+        }
+
+        .profile-email {
+            color: var(--text-tertiary);
+            margin-bottom: var(--space-4);
+            font-size: var(--font-size-sm);
+        }
+
+        .profile-badges {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-2);
+            flex-wrap: wrap;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .badge {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-full);
+            padding: var(--space-2) var(--space-4);
+            font-size: var(--font-size-xs);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            transition: all var(--transition-fast);
+        }
+
+        .badge:hover {
+            border-color: var(--primary-500);
+            color: var(--primary-500);
+            transform: translateY(-2px);
+        }
+
+        .badge i {
+            color: var(--primary-500);
+        }
+
+        .badge.premium {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 179, 0, 0.1) 100%);
+            border-color: rgba(255, 215, 0, 0.5);
+            color: #FFD700;
+        }
+
+        .badge.premium i {
+            color: #FFD700;
+        }
+
+        /* Friends List */
+        .friend-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            padding: var(--space-4);
+            border-bottom: 1px solid var(--border-default);
+            transition: all var(--transition-fast);
+        }
+
+        .friend-item:last-child {
+            border-bottom: none;
+        }
+
+        .friend-item:hover {
+            background: var(--bg-tertiary);
+            margin: 0 calc(-1 * var(--space-4));
+            padding-left: var(--space-4);
+            padding-right: var(--space-4);
+        }
+
+        .friend-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-full);
+            background: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--primary-500);
+            border: 2px solid var(--border-default);
+            flex-shrink: 0;
+        }
+
+        .friend-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .friend-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-1);
+        }
+
+        .friend-status {
+            font-size: var(--font-size-xs);
+            color: var(--text-muted);
+        }
+
+        .friend-status.online {
+            color: var(--success);
+        }
+
+        .friend-action {
+            padding: var(--space-2) var(--space-4);
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            transition: all var(--transition-fast);
+        }
+
+        .friend-action.add {
+            background: var(--primary-500);
+            color: white;
+            border: none;
+        }
+
+        .friend-action.add:hover {
+            background: var(--primary-600);
+            transform: translateY(-2px);
+        }
+
+        .friend-action.pending {
+            background: transparent;
+            color: var(--text-tertiary);
+            border: 1px solid var(--border-default);
+        }
+
+        .friend-action.pending:hover {
+            border-color: var(--text-secondary);
+            color: var(--text-secondary);
+        }
+
+        /* Activity History */
+        .activity-history-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            padding: var(--space-4);
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--space-3);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            border: 1px solid var(--border-default);
+        }
+
+        .activity-history-item:hover {
+            background: var(--bg-card-solid);
+            border-color: var(--primary-500);
+            transform: translateX(5px);
+        }
+
+        .activity-history-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: var(--radius-lg);
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-shrink: 0;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .activity-history-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .activity-history-distance {
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--space-1);
+        }
+
+        .activity-history-date {
+            font-size: var(--font-size-xs);
+            color: var(--text-muted);
+        }
+
+        .activity-history-summary {
+            display: flex;
+            gap: var(--space-4);
+            margin-top: var(--space-2);
+            font-size: var(--font-size-sm);
+            color: var(--text-tertiary);
+        }
+
+        .activity-history-summary span {
+            display: flex;
+            align-items: center;
+            gap: var(--space-1);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: var(--space-12) var(--space-4);
+            color: var(--text-muted);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: var(--space-4);
+            opacity: 0.3;
+        }
+
+        .empty-state-title {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-2);
+        }
+
+        .empty-state-text {
+            font-size: var(--font-size-sm);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-overlay);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: var(--z-modal-backdrop);
+            padding: var(--space-4);
+            animation: fadeIn var(--transition-fast) ease-out;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-6);
+            max-width: 440px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            animation: scaleIn var(--transition-base) ease-out;
+            box-shadow: var(--shadow-2xl);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-5);
+        }
+
+        .modal-title {
+            font-size: var(--font-size-xl);
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-tertiary);
+            font-size: var(--font-size-xl);
+            cursor: pointer;
+            padding: var(--space-2);
+            border-radius: var(--radius-md);
+            transition: all var(--transition-fast);
+        }
+
+        .modal-close:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: var(--space-4);
+            right: var(--space-4);
+            z-index: var(--z-toast);
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-3);
+            max-width: 400px;
+        }
+
+        .toast {
+            background: var(--bg-card);
+            border: 1px solid var(--border-default);
+            border-radius: var(--radius-lg);
+            padding: var(--space-4);
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            box-shadow: var(--shadow-xl);
+            animation: slideInRight var(--transition-base) ease-out;
+            backdrop-filter: blur(10px);
+            min-width: 300px;
+        }
+
+        .toast.success { 
+            border-left: 4px solid var(--success);
+            background: rgba(16, 185, 129, 0.1);
+        }
+        .toast.error { 
+            border-left: 4px solid var(--error);
+            background: rgba(239, 68, 68, 0.1);
+        }
+        .toast.warning { 
+            border-left: 4px solid var(--warning);
+            background: rgba(245, 158, 11, 0.1);
+        }
+        .toast.info { 
+            border-left: 4px solid var(--info);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .toast-icon {
+            font-size: var(--font-size-xl);
+            flex-shrink: 0;
+        }
+
+        .toast.success .toast-icon { color: var(--success); }
+        .toast.error .toast-icon { color: var(--error); }
+        .toast.warning .toast-icon { color: var(--warning); }
+        .toast.info .toast-icon { color: var(--info); }
+
+        .toast-message {
+            flex: 1;
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: var(--space-1);
+            transition: color var(--transition-fast);
+        }
+
+        .toast-close:hover {
+            color: var(--text-primary);
+        }
+
+        /* Loader */
+        .loader {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 3px solid var(--border-default);
+            border-top-color: var(--primary-500);
+            border-radius: var(--radius-full);
+            animation: spin 0.8s linear infinite;
+        }
+
+        .loader-sm {
+            width: 16px;
+            height: 16px;
+            border-width: 2px;
+        }
+
+        .loader-lg {
+            width: 40px;
+            height: 40px;
+            border-width: 4px;
+        }
+
+        /* Skeleton Loading */
+        .skeleton {
+            background: linear-gradient(
+                90deg,
+                var(--bg-tertiary) 25%,
+                var(--bg-card-solid) 50%,
+                var(--bg-tertiary) 75%
+            );
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: var(--radius-md);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gray-600);
+            border-radius: var(--radius-full);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gray-500);
+        }
+
+        /* Selection */
+        ::selection {
+            background: var(--primary-500);
+            color: white;
+        }
+
+        /* Focus visible */
+        :focus-visible {
+            outline: 2px solid var(--primary-500);
+            outline-offset: 2px;
+        }
+
+        /* Print */
+        @media print {
+            .bottom-nav,
+            .tracking-controls,
+            .tracking-stats,
+            .map-overlay,
+            .app-header {
+                display: none !important;
+            }
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 640px) {
+            :root {
+                --font-size-5xl: 2.5rem;
+                --font-size-4xl: 2rem;
+            }
+
+            .landing-features {
+                grid-template-columns: 1fr;
+            }
+
+            .landing-stats {
+                gap: var(--space-6);
+            }
+
+            .tracking-stats {
+                gap: var(--space-4);
+                padding: var(--space-3) var(--space-4);
+                bottom: 160px;
+            }
+
+            .tracking-stat-value {
+                font-size: var(--font-size-lg);
+            }
+
+            .tracking-btn {
+                width: 64px;
+                height: 64px;
+            }
+
+            .modal {
+                margin: var(--space-4);
+                max-height: 90vh;
+            }
+
+            .toast {
+                min-width: auto;
+                max-width: calc(100vw - var(--space-8));
+            }
+
+            .toast-container {
+                left: var(--space-4);
+                right: var(--space-4);
+            }
+        }
+
+        @media (min-width: 768px) {
+            .auth-container {
+                padding: var(--space-10);
+            }
+
+            .tracking-stats {
+                gap: var(--space-8);
+            }
+
+            .bottom-nav {
+                max-width: 600px;
+                left: 50%;
+                transform: translateX(-50%);
+                border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+            }
+        }
+
+        /* ==================== LEAFLET CUSTOMIZATION ==================== */
+        .leaflet-container {
+            background: var(--bg-secondary);
+            font-family: var(--font-family);
+        }
+
+        .leaflet-popup-content-wrapper {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-default);
+        }
+
+        .leaflet-popup-tip {
+            background: var(--bg-card);
+        }
+
+        .leaflet-control-zoom {
+            border: none !important;
+            box-shadow: var(--shadow-md) !important;
+        }
+
+        .leaflet-control-zoom a {
+            background: var(--bg-card) !important;
+            color: var(--text-primary) !important;
+            border: 1px solid var(--border-default) !important;
+        }
+
+        .leaflet-control-zoom a:hover {
+            background: var(--bg-card-solid) !important;
+        }
+
+        .custom-marker {
+            background: var(--primary-500);
+            border: 3px solid white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.4), 0 0 20px rgba(255, 107, 53, 0.5);
+            transition: all var(--transition-fast);
+        }
+
+        .custom-marker.pulsing {
+            animation: pulse-ring 1.5s ease-out infinite;
+        }
+
+        /* ==================== PAGE TRANSITIONS ==================== */
+        .page-transition {
+            animation: fadeIn var(--transition-slow) ease-out;
+        }
+
+        .page-exit {
+            animation: fadeIn var(--transition-fast) ease-out reverse;
+        }
+    </style>
+</head>
+<body>
+    <!-- ============================================
+         LANDING SCREEN
+    ============================================= -->
+    <div id="landing-screen">
+        <div class="landing-hero">
+            <div class="landing-logo animate-float">
+                <div class="landing-logo-icon">
+                    <i class="fas fa-running"></i>
+                </div>
+            </div>
+            
+            <h1 class="landing-title">Mileon</h1>
+            <p class="landing-tagline">
+                Trackez vos performances, dépassez vos limites et partagez votre passion 
+                avec une communauté de sportifs motivés.
+            </p>
+
+            <div class="landing-features">
+                <div class="feature-card animate-fade-in-up delay-100">
+                    <div class="feature-icon">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                    <h3 class="feature-title">GPS Précis</h3>
+                    <p class="feature-description">
+                        Suivez vos parcours en temps réel avec une précision centimétrique 
+                        grâce à notre technologie de géolocalisation avancée.
+                    </p>
+                </div>
+
+                <div class="feature-card animate-fade-in-up delay-200">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="feature-title">Analytics</h3>
+                    <p class="feature-description">
+                        Visualisez vos progrès avec des graphiques détaillés et des 
+                        statistiques personnalisées pour optimiser vos performances.
+                    </p>
+                </div>
+
+                <div class="feature-card animate-fade-in-up delay-300">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="feature-title">Communauté</h3>
+                    <p class="feature-description">
+                        Rejoignez des milliers de sportifs, partagez vos activités et 
+                        restez motivé grâce à notre réseau social intégré.
+                    </p>
+                </div>
+
+                <div class="feature-card animate-fade-in-up delay-400">
+                    <div class="feature-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3 class="feature-title">Défis & Badges</h3>
+                    <p class="feature-description">
+                        Gagnez des badges, relevez des défis et célébrez chaque 
+                        milestone de votre parcours sportif.
+                    </p>
+                </div>
+            </div>
+
+            <div class="landing-cta">
+                <button class="btn btn-primary" onclick="app.navigateToAuth()" style="font-size: 1.125rem; padding: 1rem 2rem;">
+                    <i class="fas fa-rocket"></i>
+                    Commencer l'aventure
+                </button>
+                <button class="btn btn-secondary" onclick="app.navigateToAuth('register')" style="font-size: 1.125rem; padding: 1rem 2rem;">
+                    <i class="fas fa-user-plus"></i>
+                    Créer un compte gratuit
+                </button>
+            </div>
+
+            <div class="landing-stats animate-fade-in-up delay-500">
+                <div class="stat-item">
+                    <div class="stat-value">50K+</div>
+                    <div class="stat-label">Utilisateurs</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">1M+</div>
+                    <div class="stat-label">Kilomètres</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">100+</div>
+                    <div class="stat-label">Pays</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         AUTH SCREEN
+    ============================================= -->
+    <div id="auth-screen" class="hidden">
+        <div class="auth-container">
+            <div class="auth-header">
+                <div class="auth-logo">
+                    <i class="fas fa-running"></i>
+                </div>
+                <h1 class="auth-title">Bienvenue sur Mileon</h1>
+                <p class="auth-subtitle">Connectez-vous pour commencer à tracker</p>
+            </div>
+
+            <!-- Login Form -->
+            <form id="login-form">
+                <div class="form-group">
+                    <label class="form-label" for="login-email">Email</label>
+                    <div class="form-input-wrapper">
+                        <input type="email" id="login-email" class="form-input" 
+                               placeholder="votre@email.com" required autocomplete="email">
+                        <i class="fas fa-envelope form-input-icon"></i>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="login-password">Mot de passe</label>
+                    <div class="form-input-wrapper">
+                        <input type="password" id="login-password" class="form-input" 
+                               placeholder="••••••••" required autocomplete="current-password">
+                        <i class="fas fa-lock form-input-icon"></i>
+                    </div>
+                </div>
+                <div class="form-options">
+                    <label class="checkbox-wrapper">
+                        <input type="checkbox" id="remember-me">
+                        <span class="checkbox-label">Se souvenir de moi</span>
+                    </label>
+                    <a href="#" class="forgot-link">Mot de passe oublié ?</a>
+                </div>
+                <button type="submit" class="btn btn-primary" id="login-btn">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Se connecter
+                </button>
+            </form>
+
+            <!-- Register Form -->
+            <form id="register-form" class="hidden">
+                <div class="form-group">
+                    <label class="form-label" for="register-name">Nom complet</label>
+                    <div class="form-input-wrapper">
+                        <input type="text" id="register-name" class="form-input" 
+                               placeholder="Jean Dupont" required autocomplete="name">
+                        <i class="fas fa-user form-input-icon"></i>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="register-email">Email</label>
+                    <div class="form-input-wrapper">
+                        <input type="email" id="register-email" class="form-input" 
+                               placeholder="votre@email.com" required autocomplete="email">
+                        <i class="fas fa-envelope form-input-icon"></i>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="register-password">Mot de passe</label>
+                    <div class="form-input-wrapper">
+                        <input type="password" id="register-password" class="form-input" 
+                               placeholder="••••••••" minlength="6" required autocomplete="new-password">
+                        <i class="fas fa-lock form-input-icon"></i>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="register-confirm">Confirmer le mot de passe</label>
+                    <div class="form-input-wrapper">
+                        <input type="password" id="register-confirm" class="form-input" 
+                               placeholder="••••••••" minlength="6" required autocomplete="new-password">
+                        <i class="fas fa-lock form-input-icon"></i>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" id="register-btn">
+                    <i class="fas fa-user-plus"></i>
+                    Créer mon compte
+                </button>
+            </form>
+
+            <div class="auth-divider">ou continuer avec</div>
+
+            <div class="social-auth">
+                <button class="social-btn" onclick="app.showToast('info', 'Connexion Google bientôt disponible')">
+                    <i class="fab fa-google"></i>
+                    Google
+                </button>
+                <button class="social-btn" onclick="app.showToast('info', 'Connexion Apple bientôt disponible')">
+                    <i class="fab fa-apple"></i>
+                    Apple
+                </button>
+            </div>
+
+            <div class="auth-switch">
+                <span id="auth-switch-text">Pas encore de compte ?</span>
+                <a href="#" id="auth-switch-link">S'inscrire</a>
+            </div>
+
+            <div style="text-align: center; margin-top: 1.5rem;">
+                <button class="btn btn-ghost" onclick="app.navigateToLanding()" style="font-size: 0.875rem;">
+                    <i class="fas fa-arrow-left"></i>
+                    Retour à l'accueil
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         MAIN APP SCREEN
+    ============================================= -->
+    <div id="app-screen" class="hidden">
+        <!-- Header -->
+        <header class="app-header" id="app-header">
+            <div class="header-logo">
+                <div class="header-logo-icon">
+                    <i class="fas fa-running"></i>
+                </div>
+                <span class="header-logo-text">Mileon</span>
+            </div>
+            <div class="header-actions">
+                <button class="header-btn" id="notifications-btn" title="Notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge hidden" id="notif-badge"></span>
+                </button>
+                <div class="user-avatar" id="header-avatar" onclick="app.navigate('profile')">JD</div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="app-main">
+            <!-- Dashboard View -->
+            <section id="view-dashboard" class="view-section">
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <h2 class="card-title">Cette semaine</h2>
+                            <p class="card-subtitle">Résumé de vos activités</p>
+                        </div>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-route"></i></div>
+                            <div class="stat-value" id="stat-distance">0</div>
+                            <div class="stat-label">Kilomètres</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                            <div class="stat-value" id="stat-duration">0</div>
+                            <div class="stat-label">Heures</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-fire"></i></div>
+                            <div class="stat-value" id="stat-calories">0</div>
+                            <div class="stat-label">Calories</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+                            <div class="stat-value" id="stat-activities">0</div>
+                            <div class="stat-label">Activités</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Progression</h3>
+                    </div>
+                    <div style="height: 220px;">
+                        <canvas id="progress-chart"></canvas>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Activités récentes</h3>
+                        <a href="#" class="card-link" onclick="app.navigate('profile'); return false;">Voir tout</a>
+                    </div>
+                    <div id="recent-activities">
+                        <div class="empty-state">
+                            <i class="fas fa-running empty-state-icon"></i>
+                            <p class="empty-state-title">Aucune activité récente</p>
+                            <p class="empty-state-text">Commencez votre première session !</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Track View -->
+            <section id="view-track" class="view-section hidden">
+                <div class="gps-status" id="gps-status">
+                    <div class="gps-indicator" id="gps-indicator"></div>
+                    <span class="gps-text" id="gps-text">En attente de connexion GPS...</span>
+                </div>
+
+                <div id="map-container">
+                    <div id="map"></div>
+                    <div class="map-overlay">
+                        <button class="map-btn" id="center-map-btn" title="Recentrer">
+                            <i class="fas fa-crosshairs"></i>
+                        </button>
+                        <button class="map-btn" id="fullscreen-btn" title="Plein écran">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                        <button class="map-btn" id="layers-btn" title="Types de carte">
+                            <i class="fas fa-layer-group"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="tracking-stats hidden" id="tracking-stats">
+                    <div class="tracking-stat">
+                        <div class="tracking-stat-value" id="track-distance">0.00</div>
+                        <div class="tracking-stat-label">km</div>
+                    </div>
+                    <div class="tracking-stat">
+                        <div class="tracking-stat-value" id="track-time">00:00</div>
+                        <div class="tracking-stat-label">Temps</div>
+                    </div>
+                    <div class="tracking-stat">
+                        <div class="tracking-stat-value" id="track-pace">--:--</div>
+                        <div class="tracking-stat-label">Allure</div>
+                    </div>
+                    <div class="tracking-stat">
+                        <div class="tracking-stat-value" id="track-speed">0.0</div>
+                        <div class="tracking-stat-label">km/h</div>
+                    </div>
+                </div>
+
+                <div class="tracking-controls">
+                    <button class="tracking-btn start" id="start-btn" title="Démarrer">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button class="tracking-btn stop hidden" id="stop-btn" title="Arrêter">
+                        <i class="fas fa-stop"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Social View -->
+            <section id="view-social" class="view-section hidden">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Fil d'actualité</h3>
+                    </div>
+                    <div id="activity-feed">
+                        <div class="empty-state">
+                            <i class="fas fa-users empty-state-icon"></i>
+                            <p class="empty-state-title">Aucune activité à afficher</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Amis</h3>
+                        <button class="btn btn-secondary btn-icon" onclick="app.showAddFriendModal()">
+                            <i class="fas fa-user-plus"></i>
+                        </button>
+                    </div>
+                    <div id="friends-list">
+                        <div class="empty-state">
+                            <i class="fas fa-user-friends empty-state-icon"></i>
+                            <p class="empty-state-title">Aucun ami pour le moment</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Profile View -->
+            <section id="view-profile" class="view-section hidden">
+                <div class="card" style="padding: 0; overflow: hidden;">
+                    <div class="profile-header">
+                        <div class="profile-avatar" id="profile-avatar">JD</div>
+                        <h2 class="profile-name" id="profile-name">Jean Dupont</h2>
+                        <p class="profile-email" id="profile-email">jean@email.com</p>
+                        <div class="profile-badges" id="profile-badges">
+                            <span class="badge"><i class="fas fa-medal"></i> Débutant</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Statistiques totales</h3>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-route"></i></div>
+                            <div class="stat-value" id="total-distance">0</div>
+                            <div class="stat-label">km totaux</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                            <div class="stat-value" id="total-time">0</div>
+                            <div class="stat-label">heures</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-fire"></i></div>
+                            <div class="stat-value" id="total-calories">0</div>
+                            <div class="stat-label">calories</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-calendar"></i></div>
+                            <div class="stat-value" id="total-days">0</div>
+                            <div class="stat-label">jours actifs</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Historique complet</h3>
+                    </div>
+                    <div id="activity-history"></div>
+                </div>
+
+                <button class="btn btn-secondary w-full" onclick="app.logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Déconnexion
+                </button>
+            </section>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a class="nav-item active" data-view="dashboard">
+                <i class="fas fa-home"></i>
+                <span>Accueil</span>
+            </a>
+            <a class="nav-item" data-view="track">
+                <i class="fas fa-map-marked-alt"></i>
+                <span>Tracker</span>
+            </a>
+            <a class="nav-item" data-view="social">
+                <i class="fas fa-users"></i>
+                <span>Social</span>
+            </a>
+            <a class="nav-item" data-view="profile">
+                <i class="fas fa-user"></i>
+                <span>Profil</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- ============================================
+         MODALS
+    ============================================= -->
+    <!-- Add Friend Modal -->
+    <div id="add-friend-modal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Ajouter un ami</h3>
+                <button class="modal-close" onclick="app.closeModal('add-friend-modal')">&times;</button>
+            </div>
+            <form id="add-friend-form">
+                <div class="form-group">
+                    <label class="form-label" for="friend-email">Email de l'ami</label>
+                    <div class="form-input-wrapper">
+                        <input type="email" id="friend-email" class="form-input" 
+                               placeholder="ami@email.com" required>
+                        <i class="fas fa-envelope form-input-icon"></i>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary w-full">
+                    <i class="fas fa-user-plus"></i>
+                    Envoyer la demande
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Activity Summary Modal -->
+    <div id="activity-summary-modal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">🎉 Activité terminée !</h3>
+                <button class="modal-close" onclick="app.closeModal('activity-summary-modal')">&times;</button>
+            </div>
+            <div id="activity-summary-content"></div>
+            <div class="flex gap-2" style="margin-top: 1.5rem;">
+                <button class="btn btn-secondary w-full" onclick="app.exportActivity()">
+                    <i class="fas fa-download"></i>
+                    Exporter
+                </button>
+                <button class="btn btn-primary w-full" onclick="app.closeModal('activity-summary-modal')">
+                    Terminer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- ============================================
+         JAVASCRIPT
+    ============================================= -->
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" 
+            crossorigin=""></script>
+    
+    <script>
+        // ============================================
+        // MILEON APPLICATION v2.0
+        // ============================================
+        
+        const app = {
+            // State
+            currentUser: null,
+            currentView: 'dashboard',
+            isTracking: false,
+            watchId: null,
+            trackData: {
+                startTime: null,
+                endTime: null,
+                positions: [],
+                distance: 0,
+                duration: 0
+            },
+            map: null,
+            marker: null,
+            markerPulse: null,
+            polyline: null,
+            progressChart: null,
+            lastActivity: null,
+            trackTimer: null,
+
+            // ============================================
+            // INITIALIZATION
+            // ============================================
+            init() {
+                console.log('🏃 Mileon v2.0 initializing...');
+                this.bindEvents();
+                this.checkAuth();
+                this.loadUsers();
+                this.initScrollEffects();
+            },
+
+            bindEvents() {
+                // Auth forms
+                document.getElementById('login-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.login();
+                });
+
+                document.getElementById('register-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.register();
+                });
+
+                // Auth switch
+                document.getElementById('auth-switch-link').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.toggleAuthForm();
+                });
+
+                // Navigation
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const view = item.dataset.view;
+                        this.navigate(view);
+                    });
+                });
+
+                // Tracking buttons
+                document.getElementById('start-btn').addEventListener('click', () => this.startTracking());
+                document.getElementById('stop-btn').addEventListener('click', () => this.stopTracking());
+
+                // Map controls
+                document.getElementById('center-map-btn').addEventListener('click', () => this.centerMap());
+                document.getElementById('fullscreen-btn').addEventListener('click', () => this.toggleFullscreen());
+                document.getElementById('layers-btn').addEventListener('click', () => this.toggleMapLayer());
+
+                // Add friend form
+                document.getElementById('add-friend-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.addFriend();
+                });
+
+                // Header buttons
+                document.getElementById('notifications-btn').addEventListener('click', () => {
+                    this.showToast('info', 'Aucune nouvelle notification');
+                });
+
+                // Header scroll effect
+                window.addEventListener('scroll', () => {
+                    const header = document.getElementById('app-header');
+                    if (window.scrollY > 10) {
+                        header.classList.add('scrolled');
+                    } else {
+                        header.classList.remove('scrolled');
+                    }
+                });
+
+                // Handle visibility change
+                document.addEventListener('visibilitychange', () => {
+                    if (document.hidden && this.isTracking) {
+                        this.showToast('warning', 'Application en arrière-plan - GPS peut être moins précis');
+                    }
+                });
+
+                // Handle online/offline
+                window.addEventListener('online', () => this.showToast('success', 'Connexion rétablie'));
+                window.addEventListener('offline', () => this.showToast('warning', 'Mode hors ligne activé'));
+
+                // Keyboard shortcuts
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        document.querySelectorAll('.modal-overlay').forEach(modal => {
+                            modal.classList.add('hidden');
+                        });
+                    }
+                });
+            },
+
+            initScrollEffects() {
+                // Intersection Observer for animations
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateY(0)';
+                        }
+                    });
+                }, { threshold: 0.1 });
+
+                document.querySelectorAll('.feature-card').forEach(card => {
+                    observer.observe(card);
+                });
+            },
+
+            // ============================================
+            // NAVIGATION
+            // ============================================
+            navigateToAuth(mode = 'login') {
+                document.getElementById('landing-screen').classList.add('hidden');
+                document.getElementById('auth-screen').classList.remove('hidden');
+                
+                if (mode === 'register' && document.getElementById('login-form').classList.contains('hidden') === false) {
+                    this.toggleAuthForm();
+                }
+            },
+
+            navigateToLanding() {
+                document.getElementById('auth-screen').classList.add('hidden');
+                document.getElementById('landing-screen').classList.remove('hidden');
+            },
+
+            navigate(view) {
+                this.currentView = view;
+
+                // Update nav items
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.classList.toggle('active', item.dataset.view === view);
+                });
+
+                // Update views with animation
+                document.querySelectorAll('.view-section').forEach(section => {
+                    section.classList.add('hidden');
+                });
+                
+                const targetView = document.getElementById(`view-${view}`);
+                targetView.classList.remove('hidden');
+                targetView.classList.add('page-transition');
+
+                // View-specific initialization
+                if (view === 'dashboard') {
+                    this.updateDashboard();
+                } else if (view === 'track') {
+                    setTimeout(() => {
+                        this.initMap();
+                        if (this.map) this.map.invalidateSize();
+                    }, 100);
+                } else if (view === 'profile') {
+                    this.updateProfile();
+                } else if (view === 'social') {
+                    this.updateSocial();
+                }
+
+                // Scroll to top
+                document.querySelector('.app-main').scrollTop = 0;
+            },
+
+            // ============================================
+            // AUTHENTICATION
+            // ============================================
+            checkAuth() {
+                const session = localStorage.getItem('mileon_session');
+                if (session) {
+                    try {
+                        this.currentUser = JSON.parse(session);
+                        this.showApp();
+                    } catch (e) {
+                        localStorage.removeItem('mileon_session');
+                        this.showLanding();
+                    }
+                } else {
+                    this.showLanding();
+                }
+            },
+
+            showLanding() {
+                document.getElementById('landing-screen').classList.remove('hidden');
+                document.getElementById('auth-screen').classList.add('hidden');
+                document.getElementById('app-screen').classList.add('hidden');
+            },
+
+            showAuth() {
+                document.getElementById('landing-screen').classList.add('hidden');
+                document.getElementById('auth-screen').classList.remove('hidden');
+                document.getElementById('app-screen').classList.add('hidden');
+            },
+
+            showApp() {
+                document.getElementById('landing-screen').classList.add('hidden');
+                document.getElementById('auth-screen').classList.add('hidden');
+                document.getElementById('app-screen').classList.remove('hidden');
+                
+                // Update header avatar
+                if (this.currentUser) {
+                    document.getElementById('header-avatar').textContent = this.getInitials(this.currentUser.name);
+                }
+                
+                this.initMap();
+                this.updateDashboard();
+                this.updateProfile();
+                this.updateSocial();
+            },
+
+            login() {
+                const btn = document.getElementById('login-btn');
+                const originalContent = btn.innerHTML;
+                btn.disabled = true;
+                btn.innerHTML = '<div class="loader loader-sm"></div> Connexion...';
+
+                const email = document.getElementById('login-email').value.trim().toLowerCase();
+                const password = document.getElementById('login-password').value;
+
+                setTimeout(() => {
+                    const users = this.getUsers();
+                    const user = users.find(u => u.email === email && u.password === password);
+
+                    if (user) {
+                        this.currentUser = { ...user, password: undefined };
+                        localStorage.setItem('mileon_session', JSON.stringify(this.currentUser));
+                        this.showToast('success', `Bon retour ${user.name.split(' ')[0]} !`);
+                        this.showApp();
+                    } else {
+                        this.showToast('error', 'Email ou mot de passe incorrect');
+                        btn.disabled = false;
+                        btn.innerHTML = originalContent;
+                    }
+                }, 800);
+            },
+
+            register() {
+                const btn = document.getElementById('register-btn');
+                const originalContent = btn.innerHTML;
+                btn.disabled = true;
+                btn.innerHTML = '<div class="loader loader-sm"></div> Création...';
+
+                const name = document.getElementById('register-name').value.trim();
+                const email = document.getElementById('register-email').value.trim().toLowerCase();
+                const password = document.getElementById('register-password').value;
+                const confirm = document.getElementById('register-confirm').value;
+
+                setTimeout(() => {
+                    if (password !== confirm) {
+                        this.showToast('error', 'Les mots de passe ne correspondent pas');
+                        btn.disabled = false;
+                        btn.innerHTML = originalContent;
+                        return;
+                    }
+
+                    const users = this.getUsers();
+                    
+                    if (users.find(u => u.email === email)) {
+                        this.showToast('error', 'Cet email est déjà utilisé');
+                        btn.disabled = false;
+                        btn.innerHTML = originalContent;
+                        return;
+                    }
+
+                    const newUser = {
+                        id: Date.now().toString(),
+                        name,
+                        email,
+                        password,
+                        createdAt: new Date().toISOString(),
+                        friends: [],
+                        friendRequests: [],
+                        badges: ['Débutant']
+                    };
+
+                    users.push(newUser);
+                    this.saveUsers(users);
+
+                    this.currentUser = { ...newUser, password: undefined };
+                    localStorage.setItem('mileon_session', JSON.stringify(this.currentUser));
+                    this.showToast('success', 'Compte créé avec succès ! Bienvenue 🎉');
+                    this.showApp();
+                }, 1000);
+            },
+
+            logout() {
+                if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
+                    this.stopTracking();
+                    this.currentUser = null;
+                    localStorage.removeItem('mileon_session');
+                    this.showLanding();
+                    this.showToast('info', 'Déconnecté avec succès');
+                }
+            },
+
+            toggleAuthForm() {
+                const loginForm = document.getElementById('login-form');
+                const registerForm = document.getElementById('register-form');
+                const switchText = document.getElementById('auth-switch-text');
+                const switchLink = document.getElementById('auth-switch-link');
+
+                if (loginForm.classList.contains('hidden')) {
+                    loginForm.classList.remove('hidden');
+                    registerForm.classList.add('hidden');
+                    switchText.textContent = "Pas encore de compte ?";
+                    switchLink.textContent = "S'inscrire";
+                } else {
+                    loginForm.classList.add('hidden');
+                    registerForm.classList.remove('hidden');
+                    switchText.textContent = "Déjà un compte ?";
+                    switchLink.textContent = "Se connecter";
+                }
+            },
+
+            // ============================================
+            // MAP & GPS
+            // ============================================
+            initMap() {
+                if (this.map) {
+                    return; // Map already initialized
+                }
+
+                const defaultPos = [48.8566, 2.3522]; // Paris
+
+                this.map = L.map('map', {
+                    zoomControl: false,
+                    attributionControl: true,
+                    zoomAnimation: true,
+                    markerZoomAnimation: true
+                }).setView(defaultPos, 13);
+
+                // Dark theme tiles
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '© OpenStreetMap'
+                }).addTo(this.map);
+
+                // Custom animated marker
+                const markerIcon = L.divIcon({
+                    className: 'custom-marker pulsing',
+                    iconSize: [20, 20],
+                    iconAnchor: [10, 10]
+                });
+
+                this.marker = L.marker(defaultPos, { icon: markerIcon }).addTo(this.map);
+                this.polyline = L.polyline([], { 
+                    color: '#FF6B35', 
+                    weight: 5,
+                    opacity: 0.8,
+                    lineCap: 'round',
+                    lineJoin: 'round'
+                }).addTo(this.map);
+
+                // Add zoom control
+                L.control.zoom({ position: 'bottomright' }).addTo(this.map);
+
+                // Add scale control
+                L.control.scale({ imperial: false, position: 'bottomleft' }).addTo(this.map);
+            },
+
+            startTracking() {
+                if (!('geolocation' in navigator)) {
+                    this.showToast('error', 'Géolocalisation non supportée');
+                    return;
+                }
+
+                const btn = document.getElementById('start-btn');
+                btn.disabled = true;
+
+                // Request permission once
+                navigator.geolocation.getCurrentPosition(
+                    () => this.initTrackingSession(),
+                    (error) => {
+                        this.handleGeoError(error);
+                        btn.disabled = false;
+                    },
+                    { 
+                        enableHighAccuracy: true, 
+                        timeout: 15000,
+                        maximumAge: 0
+                    }
+                );
+            },
+
+            initTrackingSession() {
+                this.isTracking = true;
+                this.trackData = {
+                    startTime: Date.now(),
+                    endTime: null,
+                    positions: [],
+                    distance: 0,
+                    duration: 0
+                };
+
+                // UI updates
+                document.getElementById('start-btn').classList.add('hidden');
+                document.getElementById('stop-btn').classList.remove('hidden');
+                document.getElementById('tracking-stats').classList.remove('hidden');
+                this.updateGPSStatus('searching', 'Acquisition du signal GPS...');
+
+                // Start watching position with high accuracy
+                this.watchId = navigator.geolocation.watchPosition(
+                    (position) => this.onPositionUpdate(position),
+                    (error) => this.handleGeoError(error),
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 0,
+                        distanceFilter: 5 // Only update every 5 meters
+                    }
+                );
+
+                // Start timer
+                this.trackTimer = setInterval(() => this.updateTimer(), 1000);
+
+                this.showToast('success', 'Tracking démarré ! Bon sport 🏃');
+            },
+
+            onPositionUpdate(position) {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                const accuracy = position.coords.accuracy;
+                const speed = position.coords.speed; // m/s
+                const altitude = position.coords.altitude;
+
+                const newPosition = {
+                    lat,
+                    lng,
+                    timestamp: Date.now(),
+                    accuracy,
+                    speed,
+                    altitude
+                };
+
+                // Calculate distance from last position
+                if (this.trackData.positions.length > 0) {
+                    const lastPos = this.trackData.positions[this.trackData.positions.length - 1];
+                    const segmentDistance = this.calculateDistance(
+                        lastPos.lat, lastPos.lng,
+                        lat, lng
+                    );
+                    
+                    // Only add if significant movement (reduce GPS noise)
+                    if (segmentDistance > 3) {
+                        this.trackData.distance += segmentDistance;
+                    }
+                }
+
+                this.trackData.positions.push(newPosition);
+
+                // Update map marker with smooth animation
+                const newLatLng = new L.LatLng(lat, lng);
+                this.marker.setLatLng(newLatLng);
+                
+                // Update marker icon to non-pulsing when moving
+                const movingIcon = L.divIcon({
+                    className: 'custom-marker',
+                    iconSize: [20, 20],
+                    iconAnchor: [10, 10]
+                });
+                this.marker.setIcon(movingIcon);
+
+                // Add point to polyline
+                this.polyline.addLatLng(newLatLng);
+
+                // Center map on first position
+                if (this.trackData.positions.length === 1) {
+                    this.map.setView(newLatLng, 15, { animate: true });
+                }
+
+                // Auto-center every 10 positions
+                if (this.trackData.positions.length % 10 === 0) {
+                    this.map.panTo(newLatLng, { animate: true, duration: 0.5 });
+                }
+
+                // Update stats display
+                this.updateTrackingStats(speed);
+
+                // Update GPS status
+                this.updateGPSStatus('active', `Précision: ±${Math.round(accuracy)}m`);
+            },
+
+            updateTrackingStats(speedMps) {
+                const distanceKm = this.trackData.distance / 1000;
+                const durationSec = Math.floor((Date.now() - this.trackData.startTime) / 1000);
+
+                // Distance
+                document.getElementById('track-distance').textContent = distanceKm.toFixed(2);
+
+                // Time
+                document.getElementById('track-time').textContent = this.formatDuration(durationSec * 1000);
+
+                // Speed (convert m/s to km/h)
+                const speedKmh = speedMps && speedMps > 0 ? (speedMps * 3.6).toFixed(1) : '0.0';
+                document.getElementById('track-speed').textContent = speedKmh;
+
+                // Pace (min/km)
+                if (distanceKm > 0.01 && durationSec > 0) {
+                    const paceSecPerKm = durationSec / distanceKm;
+                    document.getElementById('track-pace').textContent = this.formatPace(paceSecPerKm);
+                } else {
+                    document.getElementById('track-pace').textContent = '--:--';
+                }
+            },
+
+            updateTimer() {
+                if (!this.isTracking) return;
+                const duration = Date.now() - this.trackData.startTime;
+                document.getElementById('track-time').textContent = this.formatDuration(duration);
+            },
+
+            stopTracking() {
+                if (!this.isTracking) return;
+
+                this.isTracking = false;
+
+                // Stop GPS watching
+                if (this.watchId !== null) {
+                    navigator.geolocation.clearWatch(this.watchId);
+                    this.watchId = null;
+                }
+
+                // Stop timer
+                if (this.trackTimer) {
+                    clearInterval(this.trackTimer);
+                    this.trackTimer = null;
+                }
+
+                // Finalize track data
+                this.trackData.endTime = Date.now();
+                this.trackData.duration = this.trackData.endTime - this.trackData.startTime;
+
+                // Save activity
+                this.saveActivity();
+
+                // Reset UI
+                document.getElementById('start-btn').classList.remove('hidden');
+                document.getElementById('stop-btn').classList.add('hidden');
+                document.getElementById('tracking-stats').classList.add('hidden');
+                document.getElementById('start-btn').disabled = false;
+                this.updateGPSStatus('inactive', 'GPS déconnecté');
+
+                // Show summary
+                this.showActivitySummary();
+
+                this.showToast('success', 'Activité enregistrée ! 🎉');
+            },
+
+            handleGeoError(error) {
+                let message = 'Erreur GPS';
+                
+                switch(error.code) {
+                    case error.PERMISSION_DENIED:
+                        message = 'Permission GPS refusée. Activez-la dans les paramètres de votre navigateur.';
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        message = 'Position GPS indisponible. Vérifiez votre connexion.';
+                        break;
+                    case error.TIMEOUT:
+                        message = 'Délai GPS dépassé. Réessayez dans un endroit dégagé.';
+                        break;
+                }
+
+                this.updateGPSStatus('error', message);
+                this.showToast('error', message);
+            },
+
+            updateGPSStatus(status, text) {
+                const container = document.getElementById('gps-status');
+                const indicator = document.getElementById('gps-indicator');
+                const gpsText = document.getElementById('gps-text');
+
+                container.className = 'gps-status ' + status;
+                indicator.className = 'gps-indicator ' + status;
+                gpsText.textContent = text;
+            },
+
+            centerMap() {
+                if (this.trackData.positions.length > 0) {
+                    const lastPos = this.trackData.positions[this.trackData.positions.length - 1];
+                    this.map.setView([lastPos.lat, lastPos.lng], 15, { animate: true });
+                    this.showToast('info', 'Carte recentrée');
+                } else {
+                    this.map.setView([48.8566, 2.3522], 13);
+                }
+            },
+
+            toggleFullscreen() {
+                const container = document.getElementById('map-container');
+                if (!document.fullscreenElement) {
+                    container.requestFullscreen().catch(err => {
+                        this.showToast('warning', 'Plein écran non supporté');
+                    });
+                } else {
+                    document.exitFullscreen();
+                }
+            },
+
+            toggleMapLayer() {
+                // Could implement different map styles here
+                this.showToast('info', 'Changement de carte bientôt disponible');
+            },
+
+            // ============================================
+            // CALCULATIONS
+            // ============================================
+            calculateDistance(lat1, lon1, lat2, lon2) {
+                const R = 6371000;
+                const dLat = this.toRad(lat2 - lat1);
+                const dLon = this.toRad(lon2 - lon1);
+                const a =
+                    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                    Math.cos(this.toRad(lat1)) * Math.cos(this.toRad(lat2)) *
+                    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                return R * c;
+            },
+
+            toRad(deg) {
+                return deg * (Math.PI / 180);
+            },
+
+            formatDuration(ms) {
+                const totalSeconds = Math.floor(ms / 1000);
+                const hours = Math.floor(totalSeconds / 3600);
+                const minutes = Math.floor((totalSeconds % 3600) / 60);
+                const seconds = totalSeconds % 60;
+
+                if (hours > 0) {
+                    return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                }
+                return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            },
+
+            formatPace(secondsPerKm) {
+                if (!isFinite(secondsPerKm)) return '--:--';
+                const minutes = Math.floor(secondsPerKm / 60);
+                const seconds = Math.floor(secondsPerKm % 60);
+                return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            },
+
+            formatDate(dateString) {
+                const date = new Date(dateString);
+                const now = new Date();
+                const diff = now - date;
+
+                if (diff < 60000) return 'À l\'instant';
+                if (diff < 3600000) return `Il y a ${Math.floor(diff / 60000)} min`;
+                if (diff < 86400000) return `Il y a ${Math.floor(diff / 3600000)} h`;
+                if (diff < 604800000) return `Il y a ${Math.floor(diff / 86400000)} j`;
+
+                return date.toLocaleDateString('fr-FR', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric'
+                });
+            },
+
+            getInitials(name) {
+                return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+            },
+
+            // ============================================
+            // ACTIVITY STORAGE
+            // ============================================
+            saveActivity() {
+                const activity = {
+                    id: Date.now().toString(),
+                    userId: this.currentUser.id,
+                    userName: this.currentUser.name,
+                    userAvatar: this.getInitials(this.currentUser.name),
+                    date: new Date().toISOString(),
+                    distance: this.trackData.distance / 1000,
+                    duration: this.trackData.duration,
+                    positions: this.trackData.positions,
+                    calories: Math.round(this.trackData.distance / 1000 * 60),
+                    avgSpeed: this.trackData.distance / (this.trackData.duration / 3600000),
+                    type: 'course'
+                };
+
+                const activities = this.getActivities();
+                activities.unshift(activity);
+                this.saveActivities(activities);
+
+                this.updateUserStats(activity);
+                this.lastActivity = activity;
+            },
+
+            updateUserStats(activity) {
+                const stats = this.getUserStats(this.currentUser.id) || {
+                    totalDistance: 0,
+                    totalTime: 0,
+                    totalCalories: 0,
+                    totalActivities: 0,
+                    activeDays: []
+                };
+
+                stats.totalDistance += activity.distance;
+                stats.totalTime += activity.duration;
+                stats.totalCalories += activity.calories;
+                stats.totalActivities += 1;
+                
+                const dateStr = new Date(activity.date).toDateString();
+                if (!stats.activeDays.includes(dateStr)) {
+                    stats.activeDays.push(dateStr);
+                }
+
+                localStorage.setItem(`mileon_stats_${this.currentUser.id}`, JSON.stringify(stats));
+            },
+
+            getUserStats(userId) {
+                const stats = localStorage.getItem(`mileon_stats_${userId}`);
+                return stats ? JSON.parse(stats) : null;
+            },
+
+            getActivities() {
+                const activities = localStorage.getItem('mileon_activities');
+                return activities ? JSON.parse(activities) : [];
+            },
+
+            saveActivities(activities) {
+                localStorage.setItem('mileon_activities', JSON.stringify(activities));
+            },
+
+            // ============================================
+            // USER STORAGE
+            // ============================================
+            getUsers() {
+                const users = localStorage.getItem('mileon_users');
+                return users ? JSON.parse(users) : [];
+            },
+
+            saveUsers(users) {
+                localStorage.setItem('mileon_users', JSON.stringify(users));
+            },
+
+            loadUsers() {
+                const users = this.getUsers();
+                if (users.length === 0) {
+                    const demoUsers = [
+                        {
+                            id: '1',
+                            name: 'Marie Martin',
+                            email: 'marie@email.com',
+                            password: 'demo123',
+                            createdAt: new Date().toISOString(),
+                            friends: [],
+                            badges: ['Coureur', 'Week-end Warrior']
+                        },
+                        {
+                            id: '2',
+                            name: 'Pierre Durand',
+                            email: 'pierre@email.com',
+                            password: 'demo123',
+                            createdAt: new Date().toISOString(),
+                            friends: [],
+                            badges: ['Marathonien']
+                        }
+                    ];
+                    this.saveUsers(demoUsers);
+
+                    const demoActivities = demoUsers.map(user => ({
+                        id: Date.now().toString() + Math.random(),
+                        userId: user.id,
+                        userName: user.name,
+                        userAvatar: this.getInitials(user.name),
+                        date: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000).toISOString(),
+                        distance: 5 + Math.random() * 10,
+                        duration: 1800000 + Math.random() * 1800000,
+                        calories: Math.round((5 + Math.random() * 10) * 60),
+                        type: 'course'
+                    }));
+                    this.saveActivities(demoActivities);
+                }
+            },
+
+            // ============================================
+            // DASHBOARD
+            // ============================================
+            updateDashboard() {
+                const stats = this.getUserStats(this.currentUser.id);
+
+                if (stats) {
+                    this.animateValue('stat-distance', 0, stats.totalDistance, 1000, v => v.toFixed(1));
+                    this.animateValue('stat-duration', 0, stats.totalTime / 3600000, 1000, v => v.toFixed(1));
+                    this.animateValue('stat-calories', 0, stats.totalCalories, 1000);
+                    this.animateValue('stat-activities', 0, stats.totalActivities, 1000);
+                }
+
+                this.updateProgressChart();
+                this.updateRecentActivities();
+            },
+
+            animateValue(id, start, end, duration, format = v => Math.round(v)) {
+                const obj = document.getElementById(id);
+                if (!obj) return;
+                
+                let startTimestamp = null;
+                const step = (timestamp) => {
+                    if (!startTimestamp) startTimestamp = timestamp;
+                    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                    obj.innerHTML = format(progress * (end - start) + start);
+                    if (progress < 1) {
+                        window.requestAnimationFrame(step);
+                    }
+                };
+                window.requestAnimationFrame(step);
+            },
+
+            updateProgressChart() {
+                const ctx = document.getElementById('progress-chart');
+                if (!ctx) return;
+
+                const activities = this.getActivities()
+                    .filter(a => a.userId === this.currentUser.id)
+                    .slice(0, 7);
+
+                const labels = activities.map(a => {
+                    const date = new Date(a.date);
+                    return `${date.getDate()}/${date.getMonth() + 1}`;
+                }).reverse();
+
+                const data = activities.map(a => a.distance).reverse();
+
+                if (this.progressChart) {
+                    this.progressChart.destroy();
+                }
+
+                Chart.defaults.color = '#9CA3AF';
+                Chart.defaults.borderColor = '#374151';
+
+                this.progressChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels.length > 0 ? labels : ['Aucune donnée'],
+                        datasets: [{
+                            label: 'Distance (km)',
+                            data: data.length > 0 ? data : [0],
+                            borderColor: '#FF6B35',
+                            backgroundColor: 'rgba(255, 107, 53, 0.2)',
+                            fill: true,
+                            tension: 0.4,
+                            pointBackgroundColor: '#FF6B35',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointRadius: 4,
+                            pointHoverRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: 'rgba(31, 41, 55, 0.95)',
+                                titleColor: '#F9FAFB',
+                                bodyColor: '#D1D5DB',
+                                borderColor: '#4B5563',
+                                borderWidth: 1,
+                                padding: 12,
+                                displayColors: false,
+                                callbacks: {
+                                    label: (ctx) => `${ctx.parsed.y.toFixed(2)} km`
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: { color: '#374151' },
+                                ticks: { 
+                                    color: '#9CA3AF',
+                                    callback: (v) => v + ' km'
+                                }
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: { color: '#9CA3AF' }
+                            }
+                        },
+                        interaction: {
+                            intersect: false,
+                            mode: 'index'
+                        }
+                    }
+                });
+            },
+
+            updateRecentActivities() {
+                const container = document.getElementById('recent-activities');
+                const activities = this.getActivities()
+                    .filter(a => a.userId === this.currentUser.id)
+                    .slice(0, 3);
+
+                if (activities.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-running empty-state-icon"></i>
+                            <p class="empty-state-title">Aucune activité récente</p>
+                            <p class="empty-state-text">Commencez votre première session !</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = activities.map(activity => `
+                    <div class="activity-history-item" onclick="app.viewActivity('${activity.id}')">
+                        <div class="activity-history-icon">
+                            <i class="fas fa-running"></i>
+                        </div>
+                        <div class="activity-history-details">
+                            <div class="activity-history-distance">${activity.distance.toFixed(2)} km</div>
+                            <div class="activity-history-date">${this.formatDate(activity.date)}</div>
+                            <div class="activity-history-summary">
+                                <span><i class="fas fa-clock"></i> ${this.formatDuration(activity.duration)}</span>
+                                <span><i class="fas fa-fire"></i> ${activity.calories} cal</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            },
+
+            // ============================================
+            // PROFILE
+            // ============================================
+            updateProfile() {
+                document.getElementById('profile-name').textContent = this.currentUser.name;
+                document.getElementById('profile-email').textContent = this.currentUser.email;
+                document.getElementById('profile-avatar').textContent = this.getInitials(this.currentUser.name);
+
+                const stats = this.getUserStats(this.currentUser.id);
+                const badges = this.calculateBadges(stats);
+                document.getElementById('profile-badges').innerHTML = badges
+                    .map(b => `<span class="badge"><i class="fas fa-medal"></i> ${b}</span>`)
+                    .join('');
+
+                if (stats) {
+                    this.animateValue('total-distance', 0, stats.totalDistance, 1000, v => v.toFixed(1));
+                    this.animateValue('total-time', 0, stats.totalTime / 3600000, 1000, v => v.toFixed(1));
+                    this.animateValue('total-calories', 0, stats.totalCalories, 1000);
+                    this.animateValue('total-days', 0, stats.activeDays ? stats.activeDays.length : 0, 1000);
+                }
+
+                this.updateActivityHistory();
+            },
+
+            calculateBadges(stats) {
+                const badges = ['Débutant'];
+                
+                if (!stats) return badges;
+
+                if (stats.totalDistance >= 10) badges.push('Coureur');
+                if (stats.totalDistance >= 50) badges.push('Endurant');
+                if (stats.totalDistance >= 100) badges.push('Marathonien');
+                if (stats.totalDistance >= 500) badges.push('Ultra');
+                if (stats.totalActivities >= 10) badges.push('Régulier');
+                if (stats.totalActivities >= 50) badges.push('Addict');
+                if (stats.totalActivities >= 100) badges.push('Légende');
+                if ((stats.activeDays && stats.activeDays.length) >= 7) badges.push('Semaine complète');
+                if ((stats.activeDays && stats.activeDays.length) >= 30) badges.push('Mois complet');
+
+                return [...new Set(badges)];
+            },
+
+            updateActivityHistory() {
+                const container = document.getElementById('activity-history');
+                const activities = this.getActivities()
+                    .filter(a => a.userId === this.currentUser.id);
+
+                if (activities.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-history empty-state-icon"></i>
+                            <p class="empty-state-title">Aucun historique</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = activities.map(activity => `
+                    <div class="activity-history-item" onclick="app.viewActivity('${activity.id}')">
+                        <div class="activity-history-icon">
+                            <i class="fas fa-running"></i>
+                        </div>
+                        <div class="activity-history-details">
+                            <div class="activity-history-distance">${activity.distance.toFixed(2)} km</div>
+                            <div class="activity-history-date">${this.formatDate(activity.date)}</div>
+                            <div class="activity-history-summary">
+                                <span><i class="fas fa-clock"></i> ${this.formatDuration(activity.duration)}</span>
+                                <span><i class="fas fa-fire"></i> ${activity.calories} cal</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            },
+
+            // ============================================
+            // SOCIAL
+            // ============================================
+            updateSocial() {
+                this.updateActivityFeed();
+                this.updateFriendsList();
+            },
+
+            updateActivityFeed() {
+                const container = document.getElementById('activity-feed');
+                const activities = this.getActivities().slice(0, 10);
+
+                if (activities.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-users empty-state-icon"></i>
+                            <p class="empty-state-title">Aucune activité à afficher</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = activities.map(activity => `
+                    <div class="activity-item">
+                        <div class="activity-avatar">${activity.userAvatar}</div>
+                        <div class="activity-content">
+                            <div class="activity-header">
+                                <span class="activity-name">${activity.userName}</span>
+                                <span class="activity-time">${this.formatDate(activity.date)}</span>
+                            </div>
+                            <div class="activity-stats">
+                                <span class="activity-stat">
+                                    <i class="fas fa-route"></i> ${activity.distance.toFixed(2)} km
+                                </span>
+                                <span class="activity-stat">
+                                    <i class="fas fa-clock"></i> ${this.formatDuration(activity.duration)}
+                                </span>
+                                <span class="activity-stat">
+                                    <i class="fas fa-fire"></i> ${activity.calories} cal
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            },
+
+            updateFriendsList() {
+                const container = document.getElementById('friends-list');
+                const users = this.getUsers().filter(u => u.id !== this.currentUser.id);
+
+                if (users.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-user-friends empty-state-icon"></i>
+                            <p class="empty-state-title">Aucun utilisateur à ajouter</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = users.map(user => {
+                    const isFriend = this.currentUser.friends && this.currentUser.friends.includes(user.id);
+                    return `
+                        <div class="friend-item">
+                            <div class="friend-avatar">${this.getInitials(user.name)}</div>
+                            <div class="friend-info">
+                                <div class="friend-name">${user.name}</div>
+                                <div class="friend-status ${Math.random() > 0.5 ? 'online' : ''}">
+                                    ${user.email} ${Math.random() > 0.5 ? '• En ligne' : ''}
+                                </div>
+                            </div>
+                            <button class="friend-action ${isFriend ? 'pending' : 'add'}" 
+                                    onclick="app.toggleFriend('${user.id}')">
+                                ${isFriend ? 'Ami' : '+ Ajouter'}
+                            </button>
+                        </div>
+                    `;
+                }).join('');
+            },
+
+            toggleFriend(friendId) {
+                const users = this.getUsers();
+                const userIndex = users.findIndex(u => u.id === this.currentUser.id);
+                const friendIndex = users.findIndex(u => u.id === friendId);
+
+                if (userIndex === -1 || friendIndex === -1) return;
+
+                const user = users[userIndex];
+                const friend = users[friendIndex];
+
+                if (!user.friends) user.friends = [];
+                if (!friend.friends) friend.friends = [];
+
+                const isFriend = user.friends.includes(friendId);
+
+                if (isFriend) {
+                    user.friends = user.friends.filter(id => id !== friendId);
+                    friend.friends = friend.friends.filter(id => id !== this.currentUser.id);
+                    this.showToast('info', 'Ami supprimé');
+                } else {
+                    user.friends.push(friendId);
+                    friend.friends.push(this.currentUser.id);
+                    this.showToast('success', `${friend.name} ajouté(e) à vos amis`);
+                }
+
+                this.saveUsers(users);
+                this.currentUser = { ...user, password: undefined };
+                localStorage.setItem('mileon_session', JSON.stringify(this.currentUser));
+                this.updateFriendsList();
+            },
+
+            showAddFriendModal() {
+                document.getElementById('add-friend-modal').classList.remove('hidden');
+            },
+
+            addFriend() {
+                const email = document.getElementById('friend-email').value.trim().toLowerCase();
+                const users = this.getUsers();
+                const friend = users.find(u => u.email === email);
+
+                if (!friend) {
+                    this.showToast('error', 'Utilisateur non trouvé');
+                    return;
+                }
+
+                if (friend.id === this.currentUser.id) {
+                    this.showToast('error', 'Vous ne pouvez pas vous ajouter vous-même');
+                    return;
+                }
+
+                this.toggleFriend(friend.id);
+                this.closeModal('add-friend-modal');
+                document.getElementById('add-friend-form').reset();
+            },
+
+            // ============================================
+            // ACTIVITY SUMMARY & EXPORT
+            // ============================================
+            showActivitySummary() {
+                const activity = this.lastActivity;
+                if (!activity) return;
+
+                const content = document.getElementById('activity-summary-content');
+                const pace = activity.duration / 1000 / activity.distance;
+                
+                content.innerHTML = `
+                    <div class="stats-grid" style="margin-bottom: 1.5rem;">
+                        <div class="stat-card">
+                            <div class="stat-value text-primary">${activity.distance.toFixed(2)}</div>
+                            <div class="stat-label">km</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value text-primary">${this.formatDuration(activity.duration)}</div>
+                            <div class="stat-label">Durée</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value text-primary">${activity.calories}</div>
+                            <div class="stat-label">Calories</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value text-primary">${this.formatPace(pace)}</div>
+                            <div class="stat-label">Allure</div>
+                        </div>
+                    </div>
+                    <div style="text-align: center; color: var(--text-tertiary);">
+                        <i class="fas fa-calendar"></i> ${this.formatDate(activity.date)}
+                    </div>
+                `;
+
+                document.getElementById('activity-summary-modal').classList.remove('hidden');
+            },
+
+            viewActivity(activityId) {
+                const activity = this.getActivities().find(a => a.id === activityId);
+                if (!activity) return;
+
+                this.lastActivity = activity;
+                this.showActivitySummary();
+            },
+
+            exportActivity() {
+                const activity = this.lastActivity;
+                if (!activity) return;
+
+                const data = {
+                    type: 'FeatureCollection',
+                    features: [{
+                        type: 'Feature',
+                        properties: {
+                            name: 'Activité Mileon',
+                            distance: activity.distance,
+                            duration: activity.duration,
+                            date: activity.date,
+                            calories: activity.calories
+                        },
+                        geometry: {
+                            type: 'LineString',
+                            coordinates: activity.positions ? 
+                                activity.positions.map(p => [p.lng, p.lat]) : []
+                        }
+                    }]
+                };
+
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `mileon-activity-${activity.id}.geojson`;
+                a.click();
+                URL.revokeObjectURL(url);
+
+                this.showToast('success', 'Activité exportée !');
+            },
+
+            // ============================================
+            // UTILITIES
+            // ============================================
+            showToast(type, message) {
+                const container = document.getElementById('toast-container');
+                const icons = {
+                    success: 'fa-check-circle',
+                    error: 'fa-exclamation-circle',
+                    warning: 'fa-exclamation-triangle',
+                    info: 'fa-info-circle'
+                };
+
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                toast.innerHTML = `
+                    <i class="fas ${icons[type]} toast-icon"></i>
+                    <span class="toast-message">${message}</span>
+                    <button class="toast-close" onclick="this.parentElement.remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+
+                container.appendChild(toast);
+
+                // Auto remove after 4 seconds
+                setTimeout(() => {
+                    if (toast.parentElement) {
+                        toast.style.animation = 'slideInRight 0.3s ease reverse';
+                        setTimeout(() => toast.remove(), 300);
+                    }
+                }, 4000);
+            },
+
+            closeModal(modalId) {
+                document.getElementById(modalId).classList.add('hidden');
+            }
+        };
+
+        // ============================================
+        // START APPLICATION
+        // ============================================
+        document.addEventListener('DOMContentLoaded', () => {
+            app.init();
+        });
+
+        // Register Service Worker for PWA support
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                // Could register a service worker here for offline caching
+                console.log('📱 PWA support available');
+            });
+        }
+    </script>
+</body>
+</html>
